@@ -2,19 +2,18 @@ package org.acme.Model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
-import javax.inject.Inject;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Izin_Terlambat", schema = "absensi")
+@Table(name = "izin_terlambat", schema = "absensi")
 public class izinTerlambatModel extends PanacheEntityBase {
 
-    @GeneratedValue(strategy=GenerationType.AUTO)
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "izin_id")
-    private int izin_id;
+    private long izin_id;
 
     @Column(name = "employee_id")
     private int employee_id = 1;

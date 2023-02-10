@@ -13,11 +13,11 @@ public class employeeModel extends PanacheEntityBase {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    @Column(name = "izin_id")
-    private int izin_id;
+    @Column(name = "employee_id")
+    private int employee_id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "nama")
+    private String nama;
 
 
 }
