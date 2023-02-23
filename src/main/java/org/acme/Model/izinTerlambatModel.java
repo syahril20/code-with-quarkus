@@ -7,13 +7,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "izin_terlambat", schema = "absensi")
+@Table(name = "izin_terlambat")
 public class izinTerlambatModel extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "izin_id")
-    private long izin_id;
+    private int izin_id;
 
     @Column(name = "employee_id")
     private int employee_id = 1;

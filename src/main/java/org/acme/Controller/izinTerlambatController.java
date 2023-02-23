@@ -1,6 +1,7 @@
 package org.acme.Controller;
 
 import io.vertx.core.json.JsonObject;
+import org.acme.Model.historyIzinModel;
 import org.acme.Model.izinTerlambatModel;
 
 import org.acme.Model.jamKerjaModel;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ import java.util.List;
 public class izinTerlambatController {
 
     LocalTime currentTime = LocalTime.now();
-    LocalTime jamMasuk = LocalTime.of(9, 00, 00);
+    LocalTime jamMasuk = LocalTime.of(03, 00, 00);
 
     @POST
     @Transactional
@@ -43,37 +45,34 @@ public class izinTerlambatController {
         }
     }
 
-//    public Connection conn = null;
-//    public izinTerlambatController() {
-//        try {
-//            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/kawah", "postgres", "123456");
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//
-//    @GET
-//    @Path("{id}")
-//    public Response izin(@PathParam("id")int id) throws SQLException {
-//    OutputStream stream = null;
-//        List<historyIzinModel> izinModels = new ArrayList<>();
-//        try {
-//            PreparedStatement preparedStatement = conn.prepareStatement("select izin_terlambat.tanggal, izin_terlambat.nama_pengajuan \n" +
-//                    "from absensi.izin_terlambat where employee_id = ?");
-//            preparedStatement.setInt(1, id);
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//            while (resultSet.next()) {
-//                historyIzinModel izinTelat = new historyIzinModel();
-//                izinTelat.tanggal = resultSet.getString("tanggal");
-//                izinTelat.nama_pengajuan = resultSet.getString("nama_pengajuan");
-//                izinModels.add(izinTelat);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            conn.close();
-//        }
-//        return Response.ok().entity(izinModels).build();
-//    }
+    public Connection conn = null;
+    public izinTerlambatController() {
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/kawah", "postgres", "123456");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @GET
+    @Path("/{izin_id}")
+    public Response izin(@PathParam("izin_id")int izin_id) {
+        List<historyIzinModel> izinModels = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement("select izin_terlambat.tanggal, izin_terlambat.nama_pengajuan \n" +
+                    "from absensi.izin_terlambat where employee_id = ?");
+            preparedStatement.setInt(1, izin_id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                historyIzinModel izinTelat = new historyIzinModel();
+                izinTelat.tanggal = LocalDate.parse(resultSet.getString("tanggal"));
+                izinTelat.nama_pengajuan = resultSet.getString("nama_pengajuan");
+                izinModels.add(izinTelat);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+        return Response.ok().entity(izinModels).build();
+    }
 }
